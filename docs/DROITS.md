@@ -25,3 +25,6 @@ FFmpeg et les paquets système sont installés sur le runner Ubuntu ; aucune cop
 ## Média examiné, non utilisé
 
 « Vesuvius from Pompeii (hires version 2 scaled).png », Morn the Gorn : CC BY-SA 3.0 / GFDL. Écarté du pilote pour ne pas introduire une obligation supplémentaire de partage à l’identique. Aucune conclusion de domaine public n’a été appliquée à ce fichier.
+
+## Mise à jour version 2 (15 octobre 2026)
+Le pipeline courant remplace la voix eSpeak du pilote par Piper 1.8.0 : Tom en français et LJ Speech en anglais. Le SRT utilise maintenant les durées PCM mesurées de passages synthétisés séparément, et non une répartition proportionnelle de la durée de scène. Ce ne sont pas des repères mot à mot ; une écoute éditoriale reste nécessaire. Les mentions eSpeak et SRT proportionnels ci-dessus décrivent la version initiale. Les modèles sont téléchargés et exécutés sur GitHub Actions, sans service payant ni calcul audio sur le PC. Voir VOIX.md pour les licences et sources de cette version.

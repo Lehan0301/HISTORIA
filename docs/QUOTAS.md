@@ -26,3 +26,6 @@ Références :
 - https://support.google.com/youtube/answer/1311392
 
 YouTube demande un apport original et authentique ; des vidéos répétitives ou produites en masse peuvent ne pas être monétisables. Les sources libres et une voix synthétique ne garantissent ni acceptation ni revenus. Le dossier original et la validation éditoriale restent essentiels.
+
+## Mise à jour version 2 (15 octobre 2026)
+Le pipeline courant remplace la voix eSpeak du pilote par Piper 1.8.0 : Tom en français et LJ Speech en anglais. Le SRT utilise maintenant les durées PCM mesurées de passages synthétisés séparément, et non une répartition proportionnelle de la durée de scène. Ce ne sont pas des repères mot à mot ; une écoute éditoriale reste nécessaire. Les mentions eSpeak et SRT proportionnels ci-dessus décrivent la version initiale. Les modèles sont téléchargés et exécutés sur GitHub Actions, sans service payant ni calcul audio sur le PC. Voir VOIX.md pour les licences et sources de cette version.

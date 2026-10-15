@@ -9,17 +9,18 @@ import urllib.request
 import wave
 from piper import PiperVoice
 
-REVISION = '49a0d23f04e055f1766e5ad15ea2d121a90fa17a'
+REVISIONS = {'fr': '54a80f14a817799d43a63e33d8bfbb848fcc2caf', 'en': '9f967d15e9ccdf43078586d1476ee70f314401bd'}
 VOICES = {'fr': ('fr/fr_FR/tom/medium', 'fr_FR-tom-medium'),
           'en': ('en/en_US/ljspeech/high', 'en_US-ljspeech-high')}
 
 def load_voice(lang, evidence):
     directory, name = VOICES[lang]
+    revision = REVISIONS[lang]
     cache = pathlib.Path('.voices'); cache.mkdir(exist_ok=True)
     records = []
     for suffix in ('.onnx', '.onnx.json', '/MODEL_CARD'):
         filename = 'MODEL_CARD' if suffix.startswith('/') else name + suffix
-        url = f'https://huggingface.co/rhasspy/piper-voices/resolve/{REVISION}/{directory}/{filename}'
+        url = f'https://huggingface.co/rhasspy/piper-voices/resolve/{revision}/{directory}/{filename}'
         with urllib.request.urlopen(url, timeout=180) as response:
             data = response.read()
         target = cache / (name + '-MODEL_CARD' if filename == 'MODEL_CARD' else filename)

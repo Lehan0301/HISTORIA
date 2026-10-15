@@ -38,3 +38,6 @@ Ce kit produit le pilote Pompéi, pas un générateur universel. Pour un nouvel 
 - Dépassement de 45 min ou archive >240 Mio : raccourcir le pilote ou réduire l’encodage, pas de runner plus coûteux.
 
 L’administration et le transfert manuel restent possibles sur téléphone/tablette, mais l’upload des fichiers source initiaux est plus simple une fois le dépôt fourni par l’agent.
+
+## Mise à jour version 2 (15 octobre 2026)
+Le pipeline courant remplace la voix eSpeak du pilote par Piper 1.8.0 : Tom en français et LJ Speech en anglais. Le SRT utilise maintenant les durées PCM mesurées de passages synthétisés séparément, et non une répartition proportionnelle de la durée de scène. Ce ne sont pas des repères mot à mot ; une écoute éditoriale reste nécessaire. Les mentions eSpeak et SRT proportionnels ci-dessus décrivent la version initiale. Les modèles sont téléchargés et exécutés sur GitHub Actions, sans service payant ni calcul audio sur le PC. Voir VOIX.md pour les licences et sources de cette version.
