@@ -26,7 +26,9 @@ jobs:
       - name: Install free system tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg espeak-ng fonts-dejavu-core python3-pil python3-yaml
+          sudo apt-get install -y ffmpeg espeak-ng fonts-dejavu-core python3-pil python3-yaml python3-venv
+          python3 -m venv --system-site-packages /tmp/historia-venv
+          /tmp/historia-venv/bin/pip install piper-tts==1.8.0
       - name: Prepare and validate
         run: |
           python3 scripts/prepare_site.py
@@ -40,7 +42,7 @@ jobs:
         run: |
           args=()
           if [ "$SMOKE" = "true" ]; then args+=(--smoke); fi
-          python3 scripts/render.py --lang "$LANGUAGE_CHOICE" "${args[@]}"
+          /tmp/historia-venv/bin/python scripts/render.py --lang "$LANGUAGE_CHOICE" "${args[@]}"
       - name: Keep deliverables briefly (shared free storage)
         uses: actions/upload-artifact@v4
         with:

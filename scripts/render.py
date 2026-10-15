@@ -12,6 +12,7 @@ import urllib.parse
 import urllib.request
 import wave
 from PIL import Image, ImageDraw, ImageFont
+from speech import load_voice, synthesize
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 OUT = ROOT / 'build'
@@ -136,11 +137,12 @@ def render(lang, episode, photo_path, smoke):
     folder=OUT/lang;folder.mkdir(parents=True,exist_ok=True)
     scenes=episode['scenes'][:1] if smoke else episode['scenes']
     timeline=[];srt=[];offset=0;cue=1
+    voice=load_voice(lang,OUT)
     for scene in scenes:
         stem=folder/scene['id']
         text=stem.with_suffix('.txt');text.write_text(scene[lang],encoding='utf-8')
         wav=stem.with_suffix('.wav')
-        run('espeak-ng','-v','fr-fr' if lang=='fr' else 'en-us','-s','145','-w',wav,'-f',text)
+        measured_cues=synthesize(voice,scene[lang],wav)
         with wave.open(str(wav)) as audio:
             length=audio.getnframes()/audio.getframerate()
         length=math.ceil((length+0.8)*25)/25
@@ -151,13 +153,12 @@ def render(lang, episode, photo_path, smoke):
         if smoke:length=min(length,8);vf='scale=1280:720,format=yuv420p'
         clip=stem.with_suffix('.mp4')
         run('ffmpeg','-hide_banner','-loglevel','error','-y','-loop','1','-framerate','25','-i',png,'-i',wav,'-vf',vf,'-af','apad,loudnorm=I=-16:TP=-1.5:LRA=11','-t',f'{length:.2f}','-c:v','libx264','-preset','veryfast','-crf','24','-threads','2','-c:a','aac','-b:a','128k','-ar','48000','-ac','2','-pix_fmt','yuv420p',clip)
-        # Proportional captions: not forced alignment; human timing check required.
-        chunks=textwrap.wrap(scene[lang],width=76,break_long_words=False)
-        total=sum(len(c) for c in chunks);t=offset
-        for chunk in chunks:
-            end=t+length*len(chunk)/total
-            srt.append(f'{cue}\n{timestamp(t)} --> {timestamp(end)}\n'+textwrap.fill(chunk,38)+'\n')
-            cue+=1;t=end
+        # Each cue uses the PCM duration of that exact spoken passage.
+        for start,end,chunk in measured_cues:
+            if start >= length: break
+            end=min(end,length)
+            srt.append(f'{cue}\n{timestamp(offset+start)} --> {timestamp(offset+end)}\n'+textwrap.fill(chunk,38)+'\n')
+            cue+=1
         timeline.append({'scene':scene['id'],'start':round(offset,2),'duration':length,'sources':scene['sources'],'heading':scene['heading'][lang]})
         offset+=length
     concat=folder/'concat.txt';concat.write_text('\n'.join(f"file '{s['id']}.mp4'" for s in scenes),encoding='utf-8')
@@ -183,16 +184,17 @@ def render(lang, episode, photo_path, smoke):
     write(d,(65,650),'ILLUSTRATION SYMBOLIQUE' if lang=='fr' else 'SYMBOLIC ILLUSTRATION',18,MUTED)
     thumb.save(folder/'thumbnail.jpg',quality=93)
     refs=json.loads((ROOT/'sources.json').read_text(encoding='utf-8'))
-    desc=(episode['title'][lang]+'\n\n'+('Une enquête documentaire originale sur les retombées, les moulages et la date discutée de la catastrophe. Voix de synthèse eSpeak NG. Schémas pédagogiques, aucune reconstitution présentée comme une archive antique.\n\nCHAPITRES\n' if lang=='fr' else 'An original documentary investigation of volcanic deposits, casts and the disputed date. Synthetic eSpeak NG narration. Educational diagrams, no reconstruction presented as an ancient record.\n\nCHAPTERS\n'))
+    desc=(episode['title'][lang]+'\n\n'+('Une enquête documentaire originale sur les retombées, les moulages et la date discutée de la catastrophe. Voix de synthèse Piper. Schémas pédagogiques, aucune reconstitution présentée comme une archive antique.\n\nCHAPITRES\n' if lang=='fr' else 'An original documentary investigation of volcanic deposits, casts and the disputed date. Synthetic Piper narration. Educational diagrams, no reconstruction presented as an ancient record.\n\nCHAPTERS\n'))
     for entry in timeline:
         t=int(entry['start']);desc+=f"{t//60:02}:{t%60:02} {entry['heading']}\n"
     desc+='\nSOURCES\n'+'\n'.join(f"{r['id']} — {r['title']}\n{r['url']}" for r in refs)
+    desc+='\n\nVOICE CREDITS\nPiper (GPL-3.0-or-later), https://github.com/OHF-Voice/piper1-gpl\nFR: Tom Darboux / Tjiho, tom-medium (AGPLv3), https://git.bksp.space/Tjiho/French-tts-model-piper\nEN: LJ Speech / Linda Johnson / Keith Ito (US public domain dataset), https://keithito.com/LJ-Speech-Dataset/\n'
     desc+='\n\nMEDIA\nJebulon — Church forum Pompeii.jpg (2015), CC0 1.0\nhttps://commons.wikimedia.org/wiki/File:Church_forum_Pompeii.jpg\nhttps://creativecommons.org/publicdomain/zero/1.0/\nScaled; caption added. Original educational graphics: HISTORIA, CC0 1.0. No third-party music.\n#Pompeii #History #HISTORIA\n'
     (folder/'description.txt').write_text(desc,encoding='utf-8')
     # Keep deliverables and evidence, discard per-scene intermediate encodes.
     for pattern in ('[0-9][0-9].mp4','[0-9][0-9].wav'):
         for p in folder.glob(pattern):p.unlink()
-    return {'language':lang,'duration_seconds':offset,'file':str(final.relative_to(OUT)),'decode_test':'passed','caption_timing':'proportional, not forced-aligned'}
+    return {'language':lang,'duration_seconds':offset,'file':str(final.relative_to(OUT)),'decode_test':'passed','caption_timing':'measured PCM passage boundaries; not word-level alignment'}
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--lang',choices=['fr','en','both'],default='both');parser.add_argument('--smoke',action='store_true');args=parser.parse_args()
@@ -202,7 +204,7 @@ def main():
     report={'mode':'smoke' if args.smoke else 'full','outputs':[]}
     for lang in (['fr','en'] if args.lang=='both' else [args.lang]):report['outputs'].append(render(lang,episode,path,args.smoke))
     for name in ['sources.json','media.json','episode.json']:shutil.copy(ROOT/name,OUT/name)
-    for name in ['DROITS.md','RECHERCHE.md']:shutil.copy(ROOT/'docs'/name,OUT/name)
+    for name in ['DROITS.md','RECHERCHE.md','VOIX.md']:shutil.copy(ROOT/'docs'/name,OUT/name)
     (OUT/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
     # Hard artifact bound, below shared 500 MB free storage; no upload if exceeded.
     total=sum(p.stat().st_size for p in OUT.rglob('*') if p.is_file())
