@@ -14,7 +14,7 @@ function render(){
     label.append(area);card.append(n,h,label);$('scenes').append(card);
   }
 }
-function repoLinks(){const r=storage.get('historia-repo')||'';$('repo').value=r;if(/^[\w.-]+\/[\w.-]+$/.test(r)){$('runLink').href=`https://github.com/${r}/actions/workflows/render.yml`;$('runLink').removeAttribute('aria-disabled');}}
+function repoLinks(){const r=storage.get('historia-repo')||'Lehan0301/HISTORIA';$('repo').value=r;if(/^[\w.-]+\/[\w.-]+$/.test(r)){$('runLink').href=`https://github.com/${r}/actions/workflows/render.yml`;$('runLink').removeAttribute('aria-disabled');}}
 async function init(){try{
   const [e,s]=await Promise.all([fetch('episode.json'),fetch('sources.json')]);if(!e.ok||!s.ok)throw Error('Dossier indisponible');
   original=await e.json();episode=structuredClone(original);
@@ -26,6 +26,6 @@ $('language').addEventListener('click',()=>{language=language==='fr'?'en':'fr';$
 $('export').addEventListener('click',()=>{if(!episode)return;const url=URL.createObjectURL(new Blob([JSON.stringify(episode,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='episode.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)});
 $('reset').addEventListener('click',()=>{if(!original)return;if(!confirm('Remplacer votre brouillon par le pilote initial ?'))return;episode=structuredClone(original);storage.remove('historia-draft');render();$('editStatus').textContent='Pilote restauré.'});
 $('saveRepo').addEventListener('click',()=>{const r=$('repo').value.trim();if(!/^[\w.-]+\/[\w.-]+$/.test(r)){$('runStatus').textContent='Format attendu : propriétaire/dépôt';return;}storage.set('historia-repo',r);repoLinks();$('runStatus').textContent='Dépôt enregistré. Aucun rendu lancé.'});
-$('refresh').addEventListener('click',async()=>{const r=storage.get('historia-repo');if(!r||!/^[\w.-]+\/[\w.-]+$/.test(r)){$('runStatus').textContent='Renseignez le dépôt public.';return;}$('runStatus').textContent='Consultation de GitHub…';try{const res=await fetch(`https://api.github.com/repos/${r}/actions/workflows/render.yml/runs?per_page=1`);if(!res.ok)throw Error(`GitHub ${res.status}`);const data=await res.json(),run=data.workflow_runs?.[0];$('runStatus').textContent=run?`${run.status} · ${run.conclusion||'en cours'} · ${new Date(run.created_at).toLocaleString()}`:'Aucun lancement trouvé.';}catch(e){$('runStatus').textContent=`État indisponible (${e.message}). Consultez GitHub.`;}});
+$('refresh').addEventListener('click',async()=>{const r=storage.get('historia-repo')||'Lehan0301/HISTORIA';if(!r||!/^[\w.-]+\/[\w.-]+$/.test(r)){$('runStatus').textContent='Renseignez le dépôt public.';return;}$('runStatus').textContent='Consultation de GitHub…';try{const res=await fetch(`https://api.github.com/repos/${r}/actions/workflows/render.yml/runs?per_page=1`);if(!res.ok)throw Error(`GitHub ${res.status}`);const data=await res.json(),run=data.workflow_runs?.[0];$('runStatus').textContent=run?`${run.status} · ${run.conclusion||'en cours'} · ${new Date(run.created_at).toLocaleString()}`:'Aucun lancement trouvé.';}catch(e){$('runStatus').textContent=`État indisponible (${e.message}). Consultez GitHub.`;}});
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 repoLinks();init();

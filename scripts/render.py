@@ -59,7 +59,11 @@ def font(size, bold=False):
     return ImageFont.truetype(BOLD if bold else FONT, size)
 
 def write(draw, xy, text, size=30, color=INK, width=60, bold=False):
-    draw.multiline_text(xy, textwrap.fill(text,width), font=font(size,bold), fill=color, spacing=12)
+    wrapped = '\n'.join(textwrap.fill(line,width) for line in text.split('\n'))
+    bounds = draw.multiline_textbbox(xy, wrapped, font=font(size,bold), spacing=12)
+    if bounds[2] > 1255 or bounds[3] > 710:
+        raise ValueError(f'Text exceeds frame: {text}')
+    draw.multiline_text(xy, wrapped, font=font(size,bold), fill=color, spacing=12)
 
 def card(scene, lang, photo_path):
     im = Image.new('RGB',(1280,720),BG)
@@ -89,14 +93,17 @@ def card(scene, lang, photo_path):
                 x=680+i*32;y=300+(i%5)*44
                 d.line((x,y,x-10,y+26),fill=GOLD,width=4)
         if visual == 'current':
-            d.polygon([(500,350),(700,480),(1140,525),(1180,565),(780,565),(620,480)],fill='#a26c4e')
+            d.polygon([(500,350),(700,480),(1140,525),(1180,565),(780,565),(620,480)],fill='#87918b')
+            for x,y,r in [(650,470,25),(750,505,32),(860,518,36),(970,530,32),(1090,540,28)]:
+                d.ellipse((x-r,y-r,x+r,y+r),fill='#87918b')
+                d.ellipse((x-3,y-3,x+3,y+3),fill=GOLD)
         write(d,(70,600),('Retombées volcaniques' if fr else 'Volcanic fallout') if visual!='current' else ('Gaz + particules près du sol' if fr else 'Gases + particles near the ground'),27,GOLD,65)
     elif visual == 'cast':
         labels = ['Corps enfoui','Cavité','Moulage'] if fr else ['Buried body','Cavity','Cast']
         for i,t in enumerate(labels):
             x=70+i*400
             d.rounded_rectangle((x,230,x+340,490),radius=20,fill='#6d6252')
-            d.ellipse((x+45,325,x+290,405),fill=[BG,BG,INK][i])
+            d.ellipse((x+45,325,x+290,405),fill=['#a26c4e',BG,INK][i])
             write(d,(x,530),t,29,GOLD,22)
         write(d,(55,615),'Fiorelli · 1863',24,MUTED)
     elif visual == 'date':

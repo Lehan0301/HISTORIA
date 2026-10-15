@@ -5,7 +5,7 @@ Signature EN : « Evidence into stories. »
 
 Promesse : un mystère historique ou une découverte, expliqué en distinguant observations, interprétations et incertitudes. Aucun témoignage inventé, aucune image de synthèse présentée comme document d’époque. Public curieux, dès l’adolescence ; ton calme et accessible. La présence de victimes est traitée avec retenue, sans images graphiques dans ce pilote.
 
-Format : deux vidéos autonomes FR et EN, 720p / 25 images par seconde. Cible 5–6 minutes selon débit réel. Playlists distinctes « HISTORIA Français » et « HISTORIA English ». Une chaîne au départ ; examiner ensuite la rétention par langue avant de multiplier les comptes. Aucun nom ou identifiant YouTube n’est réservé.
+Format : deux vidéos autonomes FR et EN, 720p / 25 images par seconde. Cible 4–6 minutes selon débit réel. Playlists distinctes « HISTORIA Français » et « HISTORIA English ». Une chaîne au départ ; examiner ensuite la rétention par langue avant de multiplier les comptes. Aucun nom ou identifiant YouTube n’est réservé.
 
 Identité : bleu ardoise, papier ivoire, ocre ; titres courts, schémas légendés, sources identifiables. Narration originale écrite ici, appuyée sur les sources du dossier. Pas de musique pour ce premier montage afin de privilégier la voix et simplifier les droits.
 
