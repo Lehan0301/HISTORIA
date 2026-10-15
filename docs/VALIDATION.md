@@ -1,3 +1,20 @@
+# Version 2 — voix neuronales et sous-titres mesurés
+
+Validée techniquement le 15 octobre 2026 : https://github.com/Lehan0301/HISTORIA/actions/runs/38707616287 ; source 3c82f3c6c4439d6fedb3f2018a746e58b12fc401. Rendu bilingue complet en 4 min 7 s sur runner standard public. Cinq tests de préparation et décodage complet FFmpeg réussis. Aucun rendu audiovisuel sur le PC.
+
+- FR : 294,96 s (4 min 55 s), 90 sous-titres.
+- EN : 269,40 s (4 min 29 s), 81 sous-titres.
+- Comparaison du texte des SRT avec les scripts : complet dans les deux langues ; bornes croissantes sans chevauchement. Les retours de ligne aux traits d’union sont neutralisés dans cette comparaison.
+- Archive cloud : 136 528 370 octets. SHA256 c8bb93f7a5f70aaa3593e8605f5279dc615972314fc3b930cdd0d3f87930948c vérifié après téléchargement. Copie locale indépendante conservée sous HISTORIA-Pompei-v2-FR-EN.zip.
+- Expiration de la copie Actions : 16 octobre 2026 à 10:46:47 (Zurich). Cela ne supprime pas la copie téléchargée.
+- Voix et licences documentées dans VOIX.md ; fiches et empreintes des modèles incluses dans le rendu.
+- Le premier essai de cette évolution a échoué sur une référence de modèle inexistante ; références corrigées avant le rendu réussi ci-dessus.
+
+Limites : validation technique, pas de jugement perceptif sur la voix ; prononciation et pauses restent à écouter. Bornes par passage audio, pas mot à mot. Le WAV livré est extrait de la piste AAC finale, pas un master sans perte de la synthèse initiale. Aucun envoi sur YouTube.
+
+Les sections suivantes conservent les résultats du pilote initial et ses limites de voix/sous-titres, désormais remplacés par cette version 2.
+
+---
 # État de validation
 
 État final au 15 octobre 2026 ; résultats cloud effectivement observés ci-dessous.
