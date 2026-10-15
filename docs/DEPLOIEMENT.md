@@ -1,5 +1,9 @@
 # Déployer sans installer de logiciel ni encoder sur votre ordinateur
 
+## Instance déjà livrée
+
+Site : https://lehan0301.github.io/HISTORIA/ . Dépôt : https://github.com/Lehan0301/HISTORIA . Pages est configuré, le test court et les épisodes complets FR/EN ont été générés. Voir `VALIDATION.md` pour les preuves et limites. Les étapes suivantes permettent de reproduire l’installation ou de lancer une nouvelle version ; elles ne sont pas des actions encore demandées pour le pilote livré.
+
 ## GitHub, depuis le navigateur
 
 1. Utiliser un compte GitHub existant et un **dépôt public** nommé `HISTORIA`. Ne pas activer de runner payant, service IA ou budget de dépassement. La connexion à un compte peut faire l’objet de contrôles GitHub ; aucune méthode ne garantit l’accès gratuit si le service bloque le compte.

@@ -1,6 +1,15 @@
 # État de validation
 
-État au 15 octobre 2026 ; résultats cloud effectivement observés ci-dessous.
+État final au 15 octobre 2026 ; résultats cloud effectivement observés ci-dessous.
+
+## Livraison finale
+
+- Rendu final corrigé : https://github.com/Lehan0301/HISTORIA/actions/runs/38705814865 ; source `27bf4f452562a1cfeb57b7b2bf94e280030d3bd9`. Toutes les étapes, dont les cinq tests Python, la syntaxe JavaScript, le contrôle du média et le décodage, ont réussi.
+- Deux MP4 1280×720 à 25 images/s, pistes audio présentes : FR **4 min 27,36 s**, EN **4 min 46,48 s**. WAV, SRT, miniatures et descriptions avec chapitres mesurés sont inclus.
+- Archive finale : **133 885 305 octets**, SHA-256 `820f45e07be30dcd30223464ccf8eaeaaf0a86480626216c2b197d71fa446c82`, confirmée après téléchargement. Copie indépendante dans les livrables de cette conversation ; l’original Actions expire le **16 octobre 2026 à 10 h 29, heure de Zurich**.
+- Inspection visuelle des schémas concernés et des deux miniatures : retours à la ligne respectés, corps/cavité/moulage différenciés, légendes et crédits lisibles. La photo montre bien le portique et le campanile moderne décrits.
+- Mise à jour finale du site déployée : https://github.com/Lehan0301/HISTORIA/actions/runs/38705807428 . Durée du déploiement 57 s.
+- Brouillon modifié puis rechargé : persistance vérifiée ; texte initial rétabli. Export JSON téléchargé. Aucune erreur console relevée dans cette session. Affichage contrôlé à 390 px et sur bureau.
 
 ## Résultats exécutés
 
@@ -23,17 +32,16 @@
 - Interface écrite avec champs étiquetés, grille adaptative, état de chargement/erreur, stockage de brouillon tolérant aux restrictions, aucun token dans le navigateur.
 - Compte GitHub accessible via connecteur ; création du dépôt par navigateur après connexion réalisée par l’utilisateur.
 
-## Restant à confirmer
+## Vérifications humaines restantes
 
-- Rendu des retouches de mise en page et contrôle des images concernées.
 - Évaluation d’écoute des voix et ajustement fin des sous-titres.
 - Installation PWA sur un appareil réel et test hors ligne. Les ressources PWA sont présentes ; une capture à largeur mobile ne prouve pas l’installation sur iOS/Android.
 
-Le rendu complet est distinct du test court. La révision finale doit être identifiée par son propre lancement après les retouches de mise en page.
+Le rendu complet final est distinct du test court et du premier montage. La vérification technique du son ne remplace pas une écoute attentive.
 
 ## Limites connues
 
-- Voix mécanique, pas d’évaluation d’écoute sans WAV produit.
+- Voix mécanique ; WAV produits, sans évaluation perceptive d’écoute revendiquée.
 - SRT proportionnels, pas d’alignement phonétique.
 - Un seul média photographique, plusieurs schémas : variété limitée, esthétique de documentaire explicatif sobre plutôt que reconstitution cinématographique.
 - Interface partiellement bilingue : scripts et introduction FR/EN, administration FR.
